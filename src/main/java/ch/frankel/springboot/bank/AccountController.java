@@ -12,14 +12,16 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService service;
+    private final AccountRepository repository;
 
-    public AccountController(AccountService service) {
+    public AccountController(AccountService service, AccountRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @GetMapping("/account/{iban}")
     public Account read(@PathVariable("iban") String iban) {
-        return service.get(new Iban(iban));
+        return new Iban(iban).get(repository);
     }
 
     @GetMapping("/account")
@@ -29,6 +31,6 @@ public class AccountController {
 
     @PutMapping("/account/{fromIban}/transfer/{toIban}/{amount}")
     public List<Account> transfer(@PathVariable("fromIban") String fromIban, @PathVariable("toIban") String toIban, @PathVariable("amount") BigDecimal amount) {
-        return service.transfer(new Iban(fromIban), new Iban(toIban), amount);
+        return new Iban(fromIban).transfer(new Iban(toIban), amount, repository);
     }
 }

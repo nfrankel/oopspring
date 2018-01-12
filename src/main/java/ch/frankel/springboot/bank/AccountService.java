@@ -1,12 +1,8 @@
 package ch.frankel.springboot.bank;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class AccountService {
@@ -17,23 +13,7 @@ public class AccountService {
         this.repository = repository;
     }
 
-    public Account get(Iban iban) {
-        return repository.findByIban(iban.number).orElseThrow(() -> new NoSuchElementException("No account found with IBAN " + iban));
-    }
-
     public List<Account> getAll() {
         return repository.findAll();
-    }
-
-    @Transactional
-    public List<Account> transfer(Iban fromIban, Iban toIban, BigDecimal amount) {
-        Account from = get(fromIban);
-        Account to = get(toIban);
-        from.setAmount(from.getAmount().subtract(amount));
-        to.setAmount(to.getAmount().add(amount));
-        repository.save(from);
-        repository.save(to);
-        repository.flush();
-        return Arrays.asList(from, to);
     }
 }
