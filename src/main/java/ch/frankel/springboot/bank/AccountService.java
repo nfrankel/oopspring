@@ -1,5 +1,6 @@
 package ch.frankel.springboot.bank;
 
+import org.apache.commons.validator.routines.IBANValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,14 @@ public class AccountService {
     }
 
     public Account get(String iban) {
+        validate(iban);
         return repository.findByIban(iban).orElseThrow(() -> new NoSuchElementException("No account found with IBAN " + iban));
+    }
+
+    private void validate(String iban) {
+        if (!IBANValidator.getInstance().isValid(iban)) {
+            throw new IllegalArgumentException("Wrong format for IBAN " + iban);
+        }
     }
 
     public List<Account> getAll() {
