@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -13,17 +15,26 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Configurable(autowire = Autowire.BY_TYPE)
+@Embeddable
 public class Iban {
 
     @Transient
     @Autowired
     private AccountRepository repository;
 
-    public final String number;
+    @Column(name = "IBAN")
+    private String number;
+
+    /** JPA requirement */
+    @SuppressWarnings("unused") Iban() { }
 
     public Iban(String number) {
         validate(number);
         this.number = number;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     @Override
@@ -38,7 +49,7 @@ public class Iban {
     }
 
     public Account get() {
-        return repository.findByIban(number).orElseThrow(() -> new NoSuchElementException("No account found with IBAN " + this));
+        return repository.findByIban(this).orElseThrow(() -> new NoSuchElementException("No account found with IBAN " + this));
     }
 
     @Transactional

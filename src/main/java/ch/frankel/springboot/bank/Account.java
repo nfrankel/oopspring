@@ -14,7 +14,7 @@ public class Account {
 
     private BigDecimal amount;
 
-    private String iban;
+    private Iban iban;
 
     public Long getId() {
         return id;
@@ -28,11 +28,11 @@ public class Account {
         this.amount = amount;
     }
 
-    public String getIban() {
+    public Iban getIban() {
         return iban;
     }
 
-    public void setIban(String iban) {
+    public void setIban(Iban iban) {
         this.iban = iban;
     }
 }
