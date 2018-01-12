@@ -11,11 +11,9 @@ import java.util.List;
 @RestController
 public class AccountController {
 
-    private final AccountService service;
     private final AccountRepository repository;
 
-    public AccountController(AccountService service, AccountRepository repository) {
-        this.service = service;
+    public AccountController(AccountRepository repository) {
         this.repository = repository;
     }
 
@@ -26,7 +24,7 @@ public class AccountController {
 
     @GetMapping("/account")
     public List<Account> read() {
-        return service.getAll();
+        return repository.findAll();
     }
 
     @PutMapping("/account/{fromIban}/transfer/{toIban}/{amount}")
