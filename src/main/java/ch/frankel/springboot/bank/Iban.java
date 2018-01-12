@@ -56,8 +56,7 @@ public class Iban {
     public List<Account> transfer(Iban toIban, BigDecimal amount) {
         Account from = get();
         Account to = toIban.get();
-        from.setAmount(from.getAmount().subtract(amount));
-        to.setAmount(to.getAmount().add(amount));
+        from.transfer(to, amount);
         repository.save(from);
         repository.save(to);
         repository.flush();

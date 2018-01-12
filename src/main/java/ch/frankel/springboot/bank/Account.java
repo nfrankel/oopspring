@@ -19,19 +19,16 @@ public class Account {
 
     private Iban iban;
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public void serialize(JsonGenerator generator) throws IOException {
         generator.writeStartObject();
         generator.writeNumberField("id", id);
         generator.writeNumberField("amount", amount);
         generator.writeStringField("iban", iban.getNumber());
         generator.writeEndObject();
+    }
+
+    public void transfer(Account to, BigDecimal amount) {
+        this.amount = this.amount.subtract(amount);
+        to.amount = to.amount.add(amount);
     }
 }
