@@ -51,6 +51,18 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-instrument</artifactId>
+						<version>${spring-framework.version}</version>
+					</dependency>
+				</dependencies>
+                <configuration>
+					<agents>
+                    	<agent>${settings.localRepository}/org/springframework/spring-instrument/${spring-framework.version}/spring-instrument-${spring-framework.version}.jar</agent>
+					</agents>
+                </configuration>
 			</plugin>
 		</plugins>
 	</build>
