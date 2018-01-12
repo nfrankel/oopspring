@@ -18,13 +18,13 @@ public class AccountService {
         this.repository = repository;
     }
 
-    public Account get(String iban) {
+    public Account get(Iban iban) {
         validate(iban);
-        return repository.findByIban(iban).orElseThrow(() -> new NoSuchElementException("No account found with IBAN " + iban));
+        return repository.findByIban(iban.number).orElseThrow(() -> new NoSuchElementException("No account found with IBAN " + iban));
     }
 
-    private void validate(String iban) {
-        if (!IBANValidator.getInstance().isValid(iban)) {
+    private void validate(Iban iban) {
+        if (!IBANValidator.getInstance().isValid(iban.number)) {
             throw new IllegalArgumentException("Wrong format for IBAN " + iban);
         }
     }
@@ -34,7 +34,7 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Account> transfer(String fromIban, String toIban, BigDecimal amount) {
+    public List<Account> transfer(Iban fromIban, Iban toIban, BigDecimal amount) {
         Account from = get(fromIban);
         Account to = get(toIban);
         from.setAmount(from.getAmount().subtract(amount));

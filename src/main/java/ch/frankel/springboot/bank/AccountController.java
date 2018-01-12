@@ -19,7 +19,7 @@ public class AccountController {
 
     @GetMapping("/account/{iban}")
     public Account read(@PathVariable("iban") String iban) {
-        return service.get(iban);
+        return service.get(new Iban(iban));
     }
 
     @GetMapping("/account")
@@ -29,6 +29,6 @@ public class AccountController {
 
     @PutMapping("/account/{fromIban}/transfer/{toIban}/{amount}")
     public List<Account> transfer(@PathVariable("fromIban") String fromIban, @PathVariable("toIban") String toIban, @PathVariable("amount") BigDecimal amount) {
-        return service.transfer(fromIban, toIban, amount);
+        return service.transfer(new Iban(fromIban), new Iban(toIban), amount);
     }
 }
