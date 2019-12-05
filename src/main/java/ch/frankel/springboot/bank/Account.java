@@ -1,8 +1,11 @@
 package ch.frankel.springboot.bank;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 @Entity
@@ -16,10 +19,6 @@ public class Account {
 
     private Iban iban;
 
-    public Long getId() {
-        return id;
-    }
-
     public BigDecimal getAmount() {
         return amount;
     }
@@ -28,11 +27,11 @@ public class Account {
         this.amount = amount;
     }
 
-    public Iban getIban() {
-        return iban;
-    }
-
-    public void setIban(Iban iban) {
-        this.iban = iban;
+    public void serialize(JsonGenerator generator) throws IOException {
+        generator.writeStartObject();
+        generator.writeNumberField("id", id);
+        generator.writeNumberField("amount", amount);
+        generator.writeStringField("iban", iban.getNumber());
+        generator.writeEndObject();
     }
 }
